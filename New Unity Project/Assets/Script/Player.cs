@@ -132,10 +132,10 @@ public class Player : MonoBehaviour {
         if (collision.gameObject.tag == "trap") SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    private void OnBecameInvisible()
+    /*private void OnBecameInvisible()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         Debug.Log("Respown");
 
-    }
+    }*/
 }
