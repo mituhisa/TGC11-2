@@ -134,7 +134,7 @@ public class Player : MonoBehaviour {
 
     private void OnBecameInvisible()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         Debug.Log("Respown");
 
     }
