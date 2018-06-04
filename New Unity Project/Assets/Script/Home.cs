@@ -15,7 +15,7 @@ public class Home : MonoBehaviour {
     public Transform yazirusi;
     public GameObject SelectCamera;
     public Transform Marker;
-    float MoveCamX, MoveCamY;
+    float MoveCamX;
     float SelectFlg;
 
 
@@ -26,8 +26,7 @@ public class Home : MonoBehaviour {
         HomeCanvas.gameObject.SetActive(false);
         yazirusi.gameObject.SetActive(false);
         Marker.gameObject.SetActive(false);
-        MoveCamX = 1.0f;
-        MoveCamY = 0;
+        MoveCamX = 0;
         SelectFlg = 0;
 	}
 
@@ -69,17 +68,13 @@ public class Home : MonoBehaviour {
             { 
                 if(yazirusi.transform.position.y == 0)
                 {
-                    SelectFlg = 1;
+                    MoveCamX = 1;
                 }
                 else
                 {
                     SceneManager.LoadScene("End");
                 }
             }
-        }
-        else if(SelectFlg == 1)
-        {
-            Marker.gameObject.SetActive(true);
             if(SelectCamera.transform.position.x < 24)
             {
                 campos = cam.position;
@@ -88,17 +83,23 @@ public class Home : MonoBehaviour {
             }
             else
             {
+                SelectFlg = 1;
                 MoveCamX = 0;
+                Marker.gameObject.GetComponent<SpriteRenderer>().enabled = true;
             }
+        }
+        else if(SelectFlg == 1)
+        {
+            Marker.gameObject.SetActive(true);
             //マーカー上移動
             if (Input.GetKeyDown(KeyCode.UpArrow) && Marker.transform.position.y < 2.05f && Marker.transform.position.x >= 17.2f)
             {
-                Marker.transform.Translate(0, 4.1f, 0);
+                Marker.transform.Translate(0, 3.1f, 0);
             }else if (Input.GetKeyDown(KeyCode.UpArrow) && Marker.transform.position.y == 2.05f && Marker.transform.position.x >= 17.2f)
             {
                 if (StageCanvas.transform.position.y > 0)
                 {
-                    StageCanvas.transform.Translate(0, -4.1f, 0);
+                    StageCanvas.transform.Translate(0, -3.1f, 0);
                 }
             }
             //マーカー左移動
@@ -113,12 +114,12 @@ public class Home : MonoBehaviour {
             //マーカー下移動
             if (Input.GetKeyDown(KeyCode.DownArrow) && Marker.transform.position.y > -2.05f && Marker.transform.position.x >= 17.2f)
             {
-                Marker.transform.Translate(0, -4.1f, 0);
+                Marker.transform.Translate(0, -3.1f, 0);
             }else if(Input.GetKeyDown(KeyCode.DownArrow) && Marker.transform.position.y == -2.05f && Marker.transform.position.x >= 17.2f)
             {
                 if (StageCanvas.transform.position.y < 8.2f)
                 {
-                    StageCanvas.transform.Translate(0, 4.1f, 0);
+                    StageCanvas.transform.Translate(0, 3.1f, 0);
                 }
             }
             //マーカー右移動
@@ -126,6 +127,25 @@ public class Home : MonoBehaviour {
             {
                 Marker.gameObject.GetComponent<SpriteRenderer>().enabled = true;
                 Marker.transform.Translate(7.2f, 0, 0);
+            }
+
+            if(Marker.transform.position.x < 17.2f && Input.GetKeyDown(KeyCode.Space))
+            {
+                MoveCamX = -1;
+                Marker.transform.Translate(7.2f, 0, 0);
+            }
+
+            if(SelectCamera.transform.position.x > 0)
+            {
+                campos = cam.position;
+                campos += new Vector3(MoveCamX, 0, 0);
+                cam.MovePosition(campos);
+            }
+            else
+            {
+                MoveCamX = 0;
+                SelectFlg = 0;
+                Marker.gameObject.SetActive(false);
             }
         }
     }
