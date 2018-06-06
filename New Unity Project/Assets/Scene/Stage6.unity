@@ -1557,7 +1557,7 @@ GameObject:
   - component: {fileID: 1033594571}
   - component: {fileID: 1033594570}
   m_Layer: 0
-  m_Name: Player
+  m_Name: player
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1574,11 +1574,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c8d5983af6c85345b3facf6d9859ec7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  PlayerCamera: {fileID: 0}
+  MapCamera: {fileID: 0}
   speed: 8
   movebleRange: 23
-  SettingCanvas: {fileID: 2073291930}
   Vcnt: 0
+  SettingCanvas: {fileID: 2073291930}
+  hevenstime: {fileID: 0}
+  Pouse: {fileID: 0}
   ItemScp: {fileID: 0}
+  NextStage: 
 --- !u!61 &1033594571
 BoxCollider2D:
   m_ObjectHideFlags: 0

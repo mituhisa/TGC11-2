@@ -64,14 +64,14 @@ public class Player : MonoBehaviour {
         PouseFlg = false;
         SettingCanvas.gameObject.SetActive(false);
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
         hit = Physics2D.Raycast(transform.position + new Vector3(-0.225f, -0.65f), Vector2.right, 0.45f);
         //プレイヤー移動操作
         if (Setteing == false && PouseFlg == false)
         {
-<<<<<<< HEAD
 
 
             //***************************************************************************************
@@ -90,191 +90,192 @@ public class Player : MonoBehaviour {
             if (hit.transform != null)
             {
                 if (jumpFloorFlg == false)      //いじったやつ
-=======
-            //地面当たり判定
-            if (hit.transform != null)  //地面の上にいるなら
-            {
-                downspeed = 0;
-                animator.SetBool("stay", true);
-                if (Input.GetButtonDown("Jump"))
->>>>>>> master
-                {
-                    downspeed = 0;
 
-
-
-                    if (Input.GetButtonDown("Jump"))
+                    //地面当たり判定
+                    if (hit.transform != null)  //地面の上にいるなら
                     {
-                        downspeed += 10.0f;
-                        //transform.Translate(Vector3.up * 0.01f);
+                        downspeed = 0;
+                        animator.SetBool("stay", true);
+                        if (Input.GetButtonDown("Jump"))
+
+                        {
+                            downspeed = 0;
+
+
+
+                            if (Input.GetButtonDown("Jump"))
+                            {
+                                downspeed += 10.0f;
+                                //transform.Translate(Vector3.up * 0.01f);
+                            }
+
+                        }
+
+                    }
+                    else   //空中にいるなら
+                    {
+                        animator.SetBool("stay", false);
+                        animator.SetBool("move", false);
+                        downspeed += -0.3f;
+
+
+                        jumpFloorFlg = false;       //いじったやつ
+
                     }
 
-                }
+                animator.SetFloat("downspeed", downspeed);
+                float gamepadX = Input.GetAxis("Horizontal");
 
-            }
-            else   //空中にいるなら
-            {
-                animator.SetBool("stay", false);
-                animator.SetBool("move", false);
-                downspeed += -0.3f;
-
-
-                jumpFloorFlg = false;       //いじったやつ
-
-            }
-
-            animator.SetFloat("downspeed", downspeed);
-            float gamepadX = Input.GetAxis("Horizontal");
-
-            //右移動
-            if (Input.GetKey(KeyCode.RightArrow) || gamepadX == 1)
-            {
-                scale.x = -1;
-                transform.localScale = scale;
-                animator.SetBool("move",true);
-                animator.SetBool("copy", false);
-                if (Input.GetButtonDown("Jump"))
+                //右移動
+                if (Input.GetKey(KeyCode.RightArrow) || gamepadX == 1)
                 {
-                    animator.SetBool("move", false);
+                    scale.x = -1;
+                    transform.localScale = scale;
+                    animator.SetBool("move", true);
+                    animator.SetBool("copy", false);
+                    if (Input.GetButtonDown("Jump"))
+                    {
+                        animator.SetBool("move", false);
+                    }
                 }
-            }
-            //左移動
-            else if (Input.GetKey(KeyCode.LeftArrow) || gamepadX == -1)
-            {
-                scale.x = 1;
-                transform.localScale = scale;
-                animator.SetBool("move",true);
-                animator.SetBool("copy", false);
-                if (Input.GetButtonDown("Jump"))
+                //左移動
+                else if (Input.GetKey(KeyCode.LeftArrow) || gamepadX == -1)
                 {
-                    animator.SetBool("move", false);
+                    scale.x = 1;
+                    transform.localScale = scale;
+                    animator.SetBool("move", true);
+                    animator.SetBool("copy", false);
+                    if (Input.GetButtonDown("Jump"))
+                    {
+                        animator.SetBool("move", false);
+                    }
                 }
-            }
-            //立ち止まっている
-            else
-            {
-                animator.SetBool("move",false);
-            }
-            //移動反映処理
-            nowpos = rb.position;
-            nowpos += new Vector2(Input.GetAxisRaw("Horizontal") * speed * Time.deltaTime, downspeed * Time.deltaTime);
-            rb.MovePosition(nowpos);
-            //横移動制限
-            transform.position = new Vector2(Mathf.Clamp(transform.position.x, -9, 40), transform.position.y);
-            //リスポーン
-            if (transform.position.y < -9.0f) SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-            
-
-            if (Input.GetKeyDown(KeyCode.LeftArrow)) vectol = -2;
-            if (Input.GetKeyDown(KeyCode.RightArrow)) vectol = 2;
-
-            if(Input.GetKeyDown(KeyCode.C) || Input.GetButtonDown("Copy") && gamepadX == 0)
-            {
-                animator.SetBool("copy", true);
-            }
-            else if(Input.GetKeyUp(KeyCode.C) || Input.GetButtonUp("Copy"))
-            {
-                animator.SetBool("copy", false);
-            }
-
-            //切り取り＆貼り付け操作
-            if (Input.GetKeyDown(KeyCode.C) || Input.GetButtonDown("Copy") && Item.gameObject.GetComponent<Item>().SetCnt == 0)
-            {
-                if (SetItem != null) Destroy(SetItem);
-                tagnam = Item.gameObject.tag;
-                SetItem = Item;
-                SetItem.gameObject.SetActive(false);
-                ItemScp = SetItem.gameObject.GetComponent<Item>();
-                Item = null;
-            }
-
-            if (Input.GetButtonDown("Pouse"))
-            {
-                PouseFlg = true;
-                Pouse.SetActive(true);
-                PlayerCamera.SetActive(!PlayerCamera.activeSelf);
-                MapCamera.SetActive(!MapCamera.activeSelf);
-            }
-
-        }
-
-        if (PouseFlg == false)
-        {
-            if (SetItem != null && Input.GetKeyDown(KeyCode.V) || Input.GetButtonDown("Paste") && SetItem.gameObject.GetComponent<Item>().SetCnt == 0)
-            {
-                animator.SetBool("copy", true);
-                if (hit.transform != null)
-                {
-                    SettingCanvas.gameObject.SetActive(true);
-                }
+                //立ち止まっている
                 else
                 {
-                    hevenstime.gameObject.SetActive(true);
+                    animator.SetBool("move", false);
                 }
-                Vcnt = 1;
-                Setteing = true;
-                SetItem.gameObject.SetActive(true);
-                GameObject.Find(tagnam).transform.position = new Vector2(nowpos.x + vectol, nowpos.y);
-                Itmpos = GameObject.Find(tagnam).transform.position;
-            }
-            if (Vcnt == 1)
-            {
-                //Vキーを押してる間アイテムの角度＆位置調整
-                cb.isTrigger = true;
-                Itmpos += new Vector2(Input.GetAxisRaw("Horizontal") * speed * Time.deltaTime, Input.GetAxisRaw("Vertical") * speed * Time.deltaTime);
-                GameObject.Find(tagnam).transform.position = Itmpos;
-                if (Input.GetKeyDown(KeyCode.Space))
-                {
-                    rot += 10;
-                    if (rot > 350) rot = 0;
-                }
-                SetItem.transform.eulerAngles = new Vector3(0, 0, rot);
+                //移動反映処理
+                nowpos = rb.position;
+                nowpos += new Vector2(Input.GetAxisRaw("Horizontal") * speed * Time.deltaTime, downspeed * Time.deltaTime);
+                rb.MovePosition(nowpos);
+                //横移動制限
+                transform.position = new Vector2(Mathf.Clamp(transform.position.x, -9, 40), transform.position.y);
+                //リスポーン
+                if (transform.position.y < -9.0f) SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 
-                if (Input.GetKeyUp(KeyCode.V) || Input.GetButtonUp("Paste"))  //Vキーを離したら調整終了
+
+                if (Input.GetKeyDown(KeyCode.LeftArrow)) vectol = -2;
+                if (Input.GetKeyDown(KeyCode.RightArrow)) vectol = 2;
+
+                if (Input.GetKeyDown(KeyCode.C) || Input.GetButtonDown("Copy") && gamepadX == 0)
+                {
+                    animator.SetBool("copy", true);
+                }
+                else if (Input.GetKeyUp(KeyCode.C) || Input.GetButtonUp("Copy"))
                 {
                     animator.SetBool("copy", false);
-                    SettingCanvas.gameObject.SetActive(false);
-                    hevenstime.gameObject.SetActive(false);
-                    Setteing = false;
-                    cb.isTrigger = false;
-                    ItemScp.SetCnt = 1;
-                    SetItem = null;
-                    Vcnt = 0;
-                    rot = 0;
                 }
-            }
-        }
 
-        if(PouseFlg == true)
-        {
-            GameObject yazirusi = GameObject.Find("yazirusi") ;
-            yazirusi.gameObject.GetComponent<SpriteRenderer>().enabled = true;
-            float gamepadY = Input.GetAxis("Vertical");
-            if (Input.GetKeyDown(KeyCode.UpArrow) || gamepadY == 1)
-            {
-                if (yazirusi.transform.position.y < 5)
+                //切り取り＆貼り付け操作
+                if (Input.GetKeyDown(KeyCode.C) || Input.GetButtonDown("Copy") && Item.gameObject.GetComponent<Item>().SetCnt == 0)
                 {
-                    yazirusi.transform.position = new Vector3(yazirusi.transform.position.x, 5, 0);
+                    if (SetItem != null) Destroy(SetItem);
+                    tagnam = Item.gameObject.tag;
+                    SetItem = Item;
+                    SetItem.gameObject.SetActive(false);
+                    ItemScp = SetItem.gameObject.GetComponent<Item>();
+                    Item = null;
                 }
-            }
-            if(Input.GetKeyDown(KeyCode.DownArrow) || gamepadY == -1)
-            {
-                if(yazirusi.transform.position.y > 2)
+
+                if (Input.GetButtonDown("Pouse"))
                 {
-                    yazirusi.transform.position = new Vector3(yazirusi.transform.position.x, 2, 0);
-                }
-            }
-            if(Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Copy"))
-            {
-                if (yazirusi.transform.position.y == 5)
-                {
-                    PouseFlg = false;
-                    Pouse.SetActive(false);
-                    yazirusi.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+                    PouseFlg = true;
+                    Pouse.SetActive(true);
                     PlayerCamera.SetActive(!PlayerCamera.activeSelf);
                     MapCamera.SetActive(!MapCamera.activeSelf);
                 }
+
+            }
+
+            if (PouseFlg == false)
+            {
+                if (SetItem != null && Input.GetKeyDown(KeyCode.V) || Input.GetButtonDown("Paste") && SetItem.gameObject.GetComponent<Item>().SetCnt == 0)
+                {
+                    animator.SetBool("copy", true);
+                    if (hit.transform != null)
+                    {
+                        SettingCanvas.gameObject.SetActive(true);
+                    }
+                    else
+                    {
+                        hevenstime.gameObject.SetActive(true);
+                    }
+                    Vcnt = 1;
+                    Setteing = true;
+                    SetItem.gameObject.SetActive(true);
+                    GameObject.Find(tagnam).transform.position = new Vector2(nowpos.x + vectol, nowpos.y);
+                    Itmpos = GameObject.Find(tagnam).transform.position;
+                }
+                if (Vcnt == 1)
+                {
+                    //Vキーを押してる間アイテムの角度＆位置調整
+                    cb.isTrigger = true;
+                    Itmpos += new Vector2(Input.GetAxisRaw("Horizontal") * speed * Time.deltaTime, Input.GetAxisRaw("Vertical") * speed * Time.deltaTime);
+                    GameObject.Find(tagnam).transform.position = Itmpos;
+                    if (Input.GetKeyDown(KeyCode.Space))
+                    {
+                        rot += 10;
+                        if (rot > 350) rot = 0;
+                    }
+                    SetItem.transform.eulerAngles = new Vector3(0, 0, rot);
+
+                    if (Input.GetKeyUp(KeyCode.V) || Input.GetButtonUp("Paste"))  //Vキーを離したら調整終了
+                    {
+                        animator.SetBool("copy", false);
+                        SettingCanvas.gameObject.SetActive(false);
+                        hevenstime.gameObject.SetActive(false);
+                        Setteing = false;
+                        cb.isTrigger = false;
+                        ItemScp.SetCnt = 1;
+                        SetItem = null;
+                        Vcnt = 0;
+                        rot = 0;
+                    }
+                }
+            }
+
+            if (PouseFlg == true)
+            {
+                GameObject yazirusi = GameObject.Find("yazirusi");
+                yazirusi.gameObject.GetComponent<SpriteRenderer>().enabled = true;
+                float gamepadY = Input.GetAxis("Vertical");
+                if (Input.GetKeyDown(KeyCode.UpArrow) || gamepadY == 1)
+                {
+                    if (yazirusi.transform.position.y < 5)
+                    {
+                        yazirusi.transform.position = new Vector3(yazirusi.transform.position.x, 5, 0);
+                    }
+                }
+                if (Input.GetKeyDown(KeyCode.DownArrow) || gamepadY == -1)
+                {
+                    if (yazirusi.transform.position.y > 2)
+                    {
+                        yazirusi.transform.position = new Vector3(yazirusi.transform.position.x, 2, 0);
+                    }
+                }
+                if (Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Copy"))
+                {
+                    if (yazirusi.transform.position.y == 5)
+                    {
+                        PouseFlg = false;
+                        Pouse.SetActive(false);
+                        yazirusi.gameObject.GetComponent<SpriteRenderer>().enabled = false;
+                        PlayerCamera.SetActive(!PlayerCamera.activeSelf);
+                        MapCamera.SetActive(!MapCamera.activeSelf);
+                    }
                     if (yazirusi.transform.position.y == 2) SceneManager.LoadScene("Home");
+                }
             }
         }
     }
@@ -288,13 +289,13 @@ public class Player : MonoBehaviour {
             Debug.Log("Tuch");
         }
 
-<<<<<<< HEAD
+        
 
 
 
-=======
+
         if (collision.gameObject.tag == "Finish") SceneManager.LoadScene(NextStage);
->>>>>>> master
+
     }
 
     private void OnCollisionExit2D(Collision2D collision)
@@ -336,7 +337,6 @@ public class Player : MonoBehaviour {
 
     }
 
-<<<<<<< HEAD
 
 
     //*****************************************************************
@@ -367,12 +367,10 @@ public class Player : MonoBehaviour {
     {
         //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         Debug.Log("Respown");
-=======
+
     //private void OnBecameInvisible()
     //{
     //    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     //    Debug.Log("Respown");
->>>>>>> master
-
-    //}
+    }
 }
