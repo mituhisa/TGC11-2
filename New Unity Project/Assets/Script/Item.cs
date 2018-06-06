@@ -12,7 +12,7 @@ public class Item : MonoBehaviour {
     void Start () {
         SetCnt = 0;
         ItmCnt = 0;
-        player = GameObject.Find("Player").GetComponent<Player>();
+        player = GameObject.Find("player").GetComponent<Player>();
         //transform.GetChild(0).gameObject.SetActive(false);
     }
 	
