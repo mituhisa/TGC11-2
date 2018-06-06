@@ -45,14 +45,15 @@ public class Title : MonoBehaviour {
                 break;
             case Mode.Menu:
                 //矢印上下移動
-                if (Input.GetKeyDown(KeyCode.UpArrow))
+                float gamepadY = Input.GetAxis("Vertical");
+                if (Input.GetKeyDown(KeyCode.UpArrow) || gamepadY == 1)
                 {
                     if(yazirusi.transform.position.y != -0.7f)
                     {
                         yazirusi.transform.position = new Vector3(-1.8f, -0.7f, 0);
                     }
                 }
-                if (Input.GetKeyDown(KeyCode.DownArrow))
+                if (Input.GetKeyDown(KeyCode.DownArrow) || gamepadY == -1)
                 {
                     if(yazirusi.transform.position.y != -1.9f)
                     {
@@ -63,9 +64,8 @@ public class Title : MonoBehaviour {
                 //選択分岐
                 if(yazirusi.transform.position.y >= -0.7f)
                 {
-                    if (Input.GetKeyDown(KeyCode.Space) && charactor.transform.position.x > -4.5f)
+                    if (Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Copy") && charactor.transform.position.x > -4.5f)
                     {
-                        mode = Mode.Select;
                         charactor.GetComponent<charctor>().mode = charctor.Mode.Copy;
                         charactor.GetComponent<charctor>().waitTime = 0;
                         GameObject.Find("Line").GetComponent<Line>().senFlg = false;
@@ -77,6 +77,7 @@ public class Title : MonoBehaviour {
                 }
                 break;
             case Mode.Select:
+                Debug.Log("SelectMode");
    
                 break;
         }

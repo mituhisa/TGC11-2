@@ -17,7 +17,7 @@ public class Line : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        interval = 0.01f;
+        interval = 0.005f;
         time = 0;
         position = new Vector3(-3.8f, -2.5f, 0);
         rota = new Quaternion(0, 0, 0, 0);
@@ -91,7 +91,7 @@ public class Line : MonoBehaviour {
                     GameObject.Destroy(n.gameObject);
                 }
                 height = 0;
-                marker.SetActive(true);
+                marker.SetActive(!marker.activeSelf);
                 senFlg = true;
                 rota = Quaternion.Euler(0, 0, 0);
             }
