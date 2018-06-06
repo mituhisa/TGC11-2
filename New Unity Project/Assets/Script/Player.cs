@@ -70,7 +70,7 @@ public class Player : MonoBehaviour {
                 animator.SetBool("stay", true);
                 if (Input.GetButtonDown("Jump"))
                 {
-                    downspeed += 10.0f;
+                    downspeed += 11.0f;
                     transform.Translate(Vector3.up * 0.01f);
                 }
             }
