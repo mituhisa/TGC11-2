@@ -23,6 +23,14 @@ public class Player : MonoBehaviour {
     public Item ItemScp;               //アイテムスクリプト変数
     float copyFlg;
 
+
+    //****************************************
+    bool jumpFloorFlg = false;
+
+
+    //*************************************
+
+
     // Use this for initialization
     void Start () {
         rb = GetComponent<Rigidbody2D>();
@@ -39,20 +47,45 @@ public class Player : MonoBehaviour {
         //プレイヤー移動操作
         if (Setteing == false)
         {
+
+
+            //***************************************************************************************
+            if (Input.GetKeyDown(KeyCode.B))        //空中でジャンプできるやつ
+            {
+                downspeed = 0;
+                downspeed += 15.0f;
+                //transform.Translate(Vector3.up * 0.01f);
+            }
+
+
+            //******************************************************************************************
+
             RaycastHit2D hit;
             hit = Physics2D.Raycast(transform.position + new Vector3(-0.45f, -0.55f), Vector2.right, 0.9f);
             if (hit.transform != null)
             {
-                downspeed = 0;
-                if (Input.GetButtonDown("Jump"))
+                if (jumpFloorFlg == false)      //いじったやつ
                 {
-                    downspeed += 10.0f;
-                    transform.Translate(Vector3.up * 0.01f);
+                    downspeed = 0;
+
+
+
+                    if (Input.GetButtonDown("Jump"))
+                    {
+                        downspeed += 10.0f;
+                        //transform.Translate(Vector3.up * 0.01f);
+                    }
+
                 }
+
             }
             else
             {
                 downspeed += -0.3f;
+
+
+                jumpFloorFlg = false;       //いじったやつ
+
             }
             nowpos = rb.position;
             nowpos += new Vector2(Input.GetAxisRaw("Horizontal") * speed * Time.deltaTime, downspeed * Time.deltaTime);
@@ -116,6 +149,10 @@ public class Player : MonoBehaviour {
 
             Debug.Log("Tuch");
         }
+
+
+
+
     }
 
     private void OnCollisionExit2D(Collision2D collision)
@@ -130,7 +167,58 @@ public class Player : MonoBehaviour {
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "trap") SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+
+        //****************************************************************
+
+        if (collision.gameObject.tag == "jumpFloor")
+        {
+
+            //transform.Translate(Vector3.up * 0.5f);
+            downspeed = 0;
+            downspeed += 15.0f;
+
+            jumpFloorFlg = true;
+            Debug.Log("jumpFloor");
+            //nowpos += new Vector2(Input.GetAxisRaw("Horizontal") * speed * Time.deltaTime, downspeed * Time.deltaTime);
+            //rb.MovePosition(nowpos);
+
+        }
+
+
+
+
+
+        //*****************************************************************
+
+
     }
+
+
+
+    //*****************************************************************
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+
+
+        if (collision.gameObject.tag == "jumpFloor")
+        {
+
+
+            downspeed = 0;
+            downspeed += 15.0f;
+
+            jumpFloorFlg = true;
+            Debug.Log("jumpFlooraaaaaa");
+
+
+        }
+
+    }
+    //*****************************************************************
+
+
+
 
     private void OnBecameInvisible()
     {

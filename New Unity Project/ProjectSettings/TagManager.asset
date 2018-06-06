@@ -13,6 +13,12 @@ TagManager:
   - cube D
   - hasira B
   - trap
+  - TestCube
+  - jumpFloor
+  - lever1
+  - lever2
+  - appearFloor1
+  - appearFloor2
   layers:
   - Default
   - TransparentFX
