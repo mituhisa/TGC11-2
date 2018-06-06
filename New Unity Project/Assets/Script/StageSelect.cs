@@ -6,52 +6,51 @@ using UnityEngine.SceneManagement;
 
 public class StageSelect : MonoBehaviour
 {
-
-    public float speed = 1.0f;
-    public string SelectScene;
-    private float time;
-    private float TuchFlg;
-    private SpriteRenderer image;
+    public GameObject Canvas;
+    bool flg;
+    float gamepadX = 0;
+    float waitTime = 0;
 
     // Use this for initialization
     void Start()
     {
-        image = this.gameObject.GetComponent<SpriteRenderer>();
+        flg = false;
     }
 
     // Update is called once per frame
     void Update()
     {
-        image.color = GetAlphaColor(image.color);
-        if(TuchFlg == 1)
+        if (flg == false)
         {
-            if (Input.GetKeyDown(KeyCode.Space))
+            gamepadX = Input.GetAxis("Horizontal");
+            Debug.Log(gamepadX);
+        }
+
+        if (Input.GetKeyDown(KeyCode.RightArrow) || gamepadX == -1 && flg == false)
+        {
+            if (Canvas.transform.position.x < 0)
             {
-                SceneManager.LoadScene(SelectScene);
+                Canvas.transform.position += new Vector3(6.5f, 0, 0);
+                flg = true;
             }
         }
-    }
-
-    Color GetAlphaColor(Color color)
-    {
-        if (TuchFlg == 1)
+        if (Input.GetKeyDown(KeyCode.LeftArrow) || gamepadX == 1 && flg == false)
         {
-            time += Time.deltaTime * 5.0f * speed;
-            color.a = Mathf.Sin(time) * 0.5f + 0.5f;
+            if (Canvas.transform.position.x > -13)
+            {
+                Canvas.transform.Translate(-6.5f, 0, 0);
+                flg = true;
+            }
         }
-        else
-        {
-            color.a = 255;
-        }
-        return color;
-    }
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        TuchFlg = 1;
-    }
 
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        TuchFlg = 0;
+        if(flg == true)
+        {
+            waitTime += Time.deltaTime;
+            if (waitTime > 0.1f)
+            {
+                flg = false;
+                waitTime = 0;
+            }
+        }
     }
 }

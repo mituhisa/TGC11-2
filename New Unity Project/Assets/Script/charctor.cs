@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class charctor : MonoBehaviour {
 
@@ -27,6 +28,7 @@ public class charctor : MonoBehaviour {
     public float waitTime;
     float createTime;
     public static bool SceneChangeFlg = false;
+    bool CopyFlg = false;
     public Mode mode;
 
     // Use this for initialization
@@ -125,11 +127,12 @@ public class charctor : MonoBehaviour {
                 }
                 break;
             case Mode.Stay:
+                //animator.SetTrigger("stay");
                 waitTime += Time.deltaTime;
+                GameObject.Find("Controller").GetComponent<Title>().mode = Title.Mode.Menu;
+                menu.SetActive(true);
                 if (waitTime > 4.0f)
                 {
-                    menu.SetActive(true);
-                    GameObject.Find("Controller").GetComponent<Title>().mode = Title.Mode.Menu;
                     //４秒後にひょっこり
                     if (gameObject.transform.position.x < -4.5f)
                     {
@@ -161,15 +164,43 @@ public class charctor : MonoBehaviour {
                 }
                 break;
             case Mode.Copy:
-                if(GameObject.Find("Line").GetComponent<Line>().senFlg == false)
+                if(CopyFlg == false)
                 {
-                    animator.SetTrigger("copy");
+                    if (GameObject.Find("Line").GetComponent<Line>().senFlg == false)
+                    {
+                        animator.SetTrigger("copy");
+                    }
+                    else
+                    {
+                        title.GetComponent<Text>().enabled = false;
+                        menu.SetActive(false);
+                        GameObject.Find("Controller").GetComponent<Title>().mode = Title.Mode.Select;
+                        animator.SetTrigger("stay");
+                        if (Input.GetButtonDown("Jump"))
+                        {
+                            CopyFlg = true;
+                            GameObject.Find("Line").GetComponent<Line>().senFlg = false;
+                            Debug.Log(CopyFlg);
+                        }
+                    }
                 }
-                else
+                else if(CopyFlg == true)
                 {
-                    menu.SetActive(false);
-                    title.SetActive(false);
-                    animator.SetTrigger("stay");
+                    Debug.Log("Ok");
+                    if (GameObject.Find("Line").GetComponent<Line>().senFlg == false)
+                    {
+                        animator.SetTrigger("copy");
+                    }
+                    else
+                    {
+                        title.GetComponent<Text>().enabled = true;
+                        menu.SetActive(true);
+                        animator.SetTrigger("stay");
+                        waitTime = 6;
+                        mode = Mode.Stay;
+                        CopyFlg = false;
+                        GameObject.Find("Controller").GetComponent<Title>().mode = Title.Mode.Menu;
+                    }
                 }
                 break;
         }
